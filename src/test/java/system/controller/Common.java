@@ -1,4 +1,4 @@
-package no.hvl.dat110.system.controller;
+package system.controller;
 
 public class Common {
 

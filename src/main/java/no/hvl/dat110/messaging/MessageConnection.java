@@ -32,30 +32,40 @@ public class MessageConnection {
 		}
 	}
 
-	public void send(Message message) {
+	public void send(Message message) throws IOException {
 
 		byte[] data;
+		data = message.getData();
 		
 		// TODO - START
 		// encapsulate the data contained in the Message and write to the output stream
+
+		outStream.writeInt(data.length);
+		outStream.write(data);
+		outStream.flush();
 		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
+//		if (true)
+//			throw new UnsupportedOperationException(TODO.method());
 			
 		// TODO - END
 
 	}
 
-	public Message receive() {
+	public Message receive() throws IOException {
 
 		Message message = null;
 		byte[] data;
 		
 		// TODO - START
 		// read a segment from the input stream and decapsulate data into a Message
+
+		int length = inStream.readInt();
+		data = new byte[length];
+		inStream.readFully(data);
+		message = new Message(data);
 		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
+//		if (true)
+//			throw new UnsupportedOperationException(TODO.method());
 		
 		// TODO - END
 		

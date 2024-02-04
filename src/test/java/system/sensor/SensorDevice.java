@@ -1,7 +1,7 @@
-package no.hvl.dat110.system.sensor;
+package system.sensor;
 
 import no.hvl.dat110.rpc.RPCServer;
-import no.hvl.dat110.system.controller.Common;
+import system.controller.Common;
 
 public class SensorDevice {
 
