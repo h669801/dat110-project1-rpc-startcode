@@ -3,6 +3,8 @@ package no.hvl.dat110.rpc;
 import no.hvl.dat110.TODO;
 import no.hvl.dat110.messaging.*;
 
+import java.io.IOException;
+
 public class RPCClient {
 
 	// underlying messaging client used for RPC communication
@@ -20,9 +22,11 @@ public class RPCClient {
 		
 		// TODO - START
 		// connect using the RPC client
+
+		connection = msgclient.connect();
 		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
+//		if (true)
+//			throw new UnsupportedOperationException(TODO.method());
 		
 		// TODO - END
 	}
@@ -31,9 +35,11 @@ public class RPCClient {
 		
 		// TODO - START
 		// disconnect by closing the underlying messaging connection
+
+		connection.close();
 		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
+//		if (true)
+//			throw new UnsupportedOperationException(TODO.method());
 		
 		// TODO - END
 	}
@@ -51,6 +57,23 @@ public class RPCClient {
 		
 		// TODO - START
 
+		// Encapsulate rpcid and param using RPCUtils
+		byte[] request = RPCUtils.encapsulate(rpcid, param);
+
+		try {
+			// Send RPC request message
+			connection.send(new Message(request));
+
+			// Receive RPC reply message
+			Message reply = connection.receive();
+
+			// Decapsulate the return value from the RPC reply message
+			returnval = RPCUtils.decapsulate(reply.getData());
+		} catch (IOException e) {
+			// Handle IOException appropriately
+			e.printStackTrace();
+		}
+
 		/*
 
 		The rpcid and param must be encapsulated according to the RPC message format
@@ -59,8 +82,8 @@ public class RPCClient {
 
 		*/
 				
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
+//		if (true)
+//			throw new UnsupportedOperationException(TODO.method());
 		
 		// TODO - END
 		return returnval;

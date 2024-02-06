@@ -1,5 +1,6 @@
 package no.hvl.dat110.rpc;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import no.hvl.dat110.TODO;
@@ -49,9 +50,47 @@ public class RPCServer {
 		   // - invoke the method and pass the param
 		   // - encapsulate return value 
 		   // - send back the message containing the RPC reply
+
+				try {
+					// Receive a Message containing an RPC reques
+					requestmsg = connection.receive();
+
+					// Extract the identifier for the RPC method to be invoked from the RPC request
+					rpcid = requestmsg.getData()[0];
+
+					// Extract the method's parameter by decapsulating using the RPCUtils
+					byte[] param = RPCUtils.decapsulate(requestmsg.getData());
+
+					// Lookup the method to be invoked
+					RPCRemoteImpl method = services.get(rpcid);
+
+					if (method != null) {
+						// Invoke the method and pass the param
+						byte[] returnValue = method.invoke(param);
+
+						// Encapsulate return value
+						byte[] replydata = RPCUtils.encapsulate(rpcid, returnValue);
+
+						// Send back the message containing the RPC reply
+						replymsg = new Message(replydata);
+						connection.send(replymsg);
+
+						// Stop the server if it was stop method that was called
+						if (rpcid == RPCCommon.RPIDSTOP) {
+							stop = true;
+						}
+					} else {
+						System.out.println("RPC method with id " + rpcid + " not found.");
+					}
+
+				} catch (IOException e) {
+					// Handle IOException appropriately
+					e.printStackTrace();
+				}
+//			}
 			
-		   if (true)
-				throw new UnsupportedOperationException(TODO.method());
+//		   if (true)
+//				throw new UnsupportedOperationException(TODO.method());
 		   
 		   // TODO - END
 
