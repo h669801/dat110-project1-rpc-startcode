@@ -28,11 +28,17 @@ public class Controller  {
 		// TODO - START
 		
 		// create local display and sensor stub objects
+		display = new DisplayStub(displayclient);
+		sensor = new SensorStub(sensorclient);
 		// connect to sensor and display RPC servers - using the RPCClients
+		displayclient.connect();
+		sensorclient.connect();
 		// read value from sensor using RPC and write to display using RPC
+		String message = String.valueOf(sensor.read());
+		display.write(message);
 			
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
+//		if (true)
+//			throw new UnsupportedOperationException(TODO.method());
 		
 		// TODO - END
 		
